@@ -1,0 +1,44 @@
+.game-field {
+    display: grid;
+    aspect-ratio: 1 / 1;
+    gap: 4px;
+}
+
+.game-cell {
+    border: 1px solid black;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.game-cell-green {
+    background-color: rgb(205, 255, 205);
+}
+
+.game-cell-red {
+    background-color: rgb(255, 202, 202);
+}
+
+.game-field-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.game-field-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.game-field-5 {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.game-field-6 {
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.game-field-7 {
+    grid-template-columns: repeat(7, 1fr);
+}
