@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // находим поля
     const fieldName = document.querySelector('#name');
     const selectSize = document.querySelector('#size');
+    const helpNumber = document.querySelector('#helpNumber');
     // находим кнопки
     const buttonStartGame = document.querySelector("#screen1 button");
     const buttonRestartGame = document.querySelector("#screen3 button");
@@ -14,10 +15,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const history = document.querySelector('#history');
     const top = document.querySelector('#top');
     // игровое поле
-    const gameField = document.querySelector(".game-field");
+    const gameField = document.querySelector("#game-field");
+    const time = document.querySelector("#time");
+    const next = document.querySelector("#next");
     // игровые переменные
     let result = 0;
     let timer;
+    let helpTimer;
     let nextNumber = 1;
 
     // инициализация игры
@@ -26,8 +30,10 @@ document.addEventListener("DOMContentLoaded", function () {
     function initialGame() {
         // сбрасываем результат
         result = 0;
+        time.textContent = result;
         // сбрасывем следующее число
         nextNumber = 1;
+        next.textContent = nextNumber;
         // показываем первый экран
         screen1.style.display = "flex";
         // остальные скрываем
@@ -55,12 +61,16 @@ document.addEventListener("DOMContentLoaded", function () {
             screen3.style.display = "none";
             // запуск таймера
             timer = setInterval(function () {
+                // увеличиваем прошедшее количество секунд
                 result++;
+                // отображаем количество секунд
+                time.textContent = result;
             }, 1000);
+            // если указано время подсказки, то запускаем таймер
+            if (helpNumber.value > 0) {
+                startHelpTimer();
+            }
         });
-        // загрузить историю
-        loadHistory();
-        loadTop();
     }
 
     function loadHistory() {
@@ -118,6 +128,8 @@ document.addEventListener("DOMContentLoaded", function () {
             row.forEach(function (number) {
                 let cell = document.createElement("div");
                 cell.textContent = number;
+                // добавляем data-number с числом, чтобы потом ее проще было найти
+                cell.dataset.number = number;
                 cell.classList.add("game-cell");
                 gameField.append(cell);
             });
@@ -152,8 +164,23 @@ document.addEventListener("DOMContentLoaded", function () {
         }).then(function (result) {
             return result.json();
         }).then(function (data) {
-            console.log(data);
+            // загрузить историю
+            loadHistory();
+            loadTop();
         });
+    }
+
+    function startHelpTimer() {
+        // останавливаем старый таймер
+        clearTimeout(helpTimer);
+        // запускаем таймер
+        helpTimer = setTimeout(function () {
+            // если подошло время, то показываем подсказку
+            // находим клетку у которой data-number равен следующему числу
+            let nextCell = document.querySelector('[data-number="'+nextNumber+'"]');
+            // добавляем ей класс желтого цвета
+            nextCell.classList.add("game-cell-yellow");
+        }, helpNumber.value * 1000);
     }
 
     buttonStartGame.addEventListener("click", function (event) {
@@ -192,6 +219,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else {
                     // иначе ждем следующее число
                     nextNumber++;
+                    // показываем следующее число
+                    next.textContent = nextNumber;
+                    // если указано время подсказки, то запускаем таймер
+                    if (helpNumber.value > 0) {
+                        startHelpTimer();
+                    }
                 }
             } else {
                 // подсвечиваем красным
