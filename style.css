@@ -13,14 +13,15 @@
     font-size: 24px;
     font-weight: 600;
     cursor: pointer;
-}
-
-.game-cell-green {
-    background-color: rgb(205, 255, 205);
+    transition: .2s background-color;
 }
 
 .game-cell-red {
     background-color: rgb(255, 202, 202);
+}
+
+.game-cell-green {
+    background-color: rgb(205, 255, 205);
 }
 
 .game-field-3 {
